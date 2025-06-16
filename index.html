@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDOListByVad</title>
+    <link rel="stylesheet" href="styles.css">
+     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="noise-overlay"></div>
+
+        <div id="splashContent" class="splash-content">
+            <div id="logoContainer" class="logo-container">
+                <div class="logo-circle">
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22,4 12,14.01 9,11.01"></polyline>
+                    </svg>
+                </div>
+                <div class="logo-glow"></div>
+            </div>
+            
+            <div id="titleContainer" class="title-container">
+                <h1 class="app-title">To Do List</h1>
+                <p class="app-subtitle">Organize your life, one task at a time</p>
+                <div id="clickHint" class="click-hint" style="display: none;">
+                    <span>Click anywhere to continue</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App - Horizontal Layout -->
+    <div id="mainApp" class="main-app">
+        <div class="horizontal-container">
+            <!-- Left Section - Motivational -->
+            <div class="left-section">
+                <div class="motivational-text">
+                    <div class="motivation-word">YOU</div>
+                    <div class="motivation-word">CAN</div>
+                    <div class="motivation-word">YOU</div>
+                    <div class="motivation-word">WILL</div>
+                </div>
+            </div>
+
+            <!-- Right Section - Task Menu -->
+            <div class="right-section">
+                <button class="menu-button" onclick="showAddTaskPage()">
+                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Task
+                </button>
+                
+                <button class="menu-button" onclick="showViewListPage()">
+                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3l8-8"></path>
+                        <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9s4.03-9 9-9c1.51 0 2.93.37 4.18 1.03"></path>
+                    </svg>
+                    View List
+                </button>
+                
+                <button class="menu-button" onclick="showPreviousTasksPage()">
+                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14,2 14,8 20,8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10,9 9,9 8,9"></polyline>
+                    </svg>
+                    Previous Tasks
+                </button>
+
+                <button class="menu-button" onclick="showAchievementsPage()">
+                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                    </svg>
+                    Achievements
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Task Page -->
+    <div id="addTaskPage" class="task-page">
+        <div class="page-header">
+            <div class="page-header-left">
+                <button class="back-button" onclick="goBackToMainApp()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                </button>
+                <h1 class="page-title">Add New Task</h1>
+            </div>
+        </div>
+
+        <div class="add-task-container">
+            <div class="add-task-form">
+                <div class="form-group">
+                    <label class="form-label">Task Title</label>
+                    <input type="text" id="taskTitle" class="form-input" placeholder="Enter task title...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="taskDescription" class="form-input form-textarea" placeholder="Enter task description..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <div class="priority-buttons">
+                        <button class="priority-btn" data-priority="low">Low</button>
+                        <button class="priority-btn active" data-priority="medium">Medium</button>
+                        <button class="priority-btn" data-priority="high">High</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Estimated Duration (minutes)</label>
+                    <div class="duration-grid">
+                        <button class="duration-btn" data-duration="5">5m</button>
+                        <button class="duration-btn" data-duration="10">10m</button>
+                        <button class="duration-btn" data-duration="15">15m</button>
+                        <button class="duration-btn active" data-duration="25">25m</button>
+                        <button class="duration-btn" data-duration="30">30m</button>
+                        <button class="duration-btn" data-duration="45">45m</button>
+                        <button class="duration-btn" data-duration="60">60m</button>
+                        <button class="duration-btn" data-duration="90">90m</button>
+                        <button class="duration-btn" data-duration="120">120m</button>
+                    </div>
+                    <input type="number" id="customDuration" class="form-input" placeholder="Custom duration..." min="1" max="480" value="25">
+                </div>
+
+                <button class="submit-btn" onclick="addTask()">Add Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View List Page (Pending Tasks) -->
+    <div id="viewListPage" class="task-page">
+        <div class="page-header">
+            <div class="page-header-left">
+                <button class="back-button" onclick="goBackToMainApp()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                </button>
+                <h1 class="page-title">Tasks to Complete</h1>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" id="searchPending" class="search-bar" placeholder="Search tasks...">
+            </div>
+        </div>
+
+        <div class="tasks-container">
+            <div id="pendingTasksList">
+                <!-- Pending tasks will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Previous Tasks Page (Completed Tasks) -->
+    <div id="previousTasksPage" class="task-page">
+        <div class="page-header">
+            <div class="page-header-left">
+                <button class="back-button" onclick="goBackToMainApp()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                </button>
+                <h1 class="page-title">Completed Tasks</h1>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" id="searchCompleted" class="search-bar" placeholder="Search completed tasks...">
+            </div>
+        </div>
+
+        <div class="tasks-container">
+            <div id="completedTasksList">
+                <!-- Completed tasks will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements Page -->
+    <div id="achievementsPage" class="task-page">
+        <div class="page-header">
+            <div class="page-header-left">
+                <button class="back-button" onclick="goBackToMainApp()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                </button>
+                <h1 class="page-title">Achievements</h1>
+            </div>
+        </div>
+
+        <div class="achievements-page">
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Achievements will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </button>
+
+    <!-- Floating Timer Button -->
+    <button id="floatingTimerBtn" class="floating-timer-btn" onclick="showTimerPopup()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12,6 12,12 16,14"></polyline>
+        </svg>
+    </button>
+
+    <!-- Timer Popup -->
+    <div id="timerPopup" class="timer-popup">
+        <div class="timer-content">
+            <button class="timer-close" onclick="hideTimerPopup()">×</button>
+            <h2 class="timer-title">Focus Timer</h2>
+            
+            <div class="timer-display">
+                <svg class="timer-circle" viewBox="0 0 200 200">
+                    <circle class="timer-bg" cx="100" cy="100" r="90"></circle>
+                    <circle id="timerProgress" class="timer-progress" cx="100" cy="100" r="90" 
+                            stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+                </svg>
+                <div class="timer-text">
+                    <div id="timerTime" class="timer-time">25:00</div>
+                    <div id="timerDuration" class="timer-duration">/ 25:00</div>
+                </div>
+            </div>
+            
+            <div class="timer-presets">
+                <button class="preset-btn" data-minutes="5">5m</button>
+                <button class="preset-btn" data-minutes="10">10m</button>
+                <button class="preset-btn" data-minutes="15">15m</button>
+                <button class="preset-btn active" data-minutes="25">25m</button>
+                <button class="preset-btn" data-minutes="30">30m</button>
+                <button class="preset-btn" data-minutes="45">45m</button>
+                <button class="preset-btn" data-minutes="60">60m</button>
+                <button class="preset-btn" data-minutes="90">90m</button>
+            </div>
+            
+            <div class="timer-controls">
+                <button id="startBtn" class="timer-btn start" onclick="startTimer()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5,3 19,12 5,21"></polygon>
+                    </svg>
+                </button>
+                <button id="pauseBtn" class="timer-btn pause" onclick="pauseTimer()" style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                </button>
+                <button id="stopBtn" class="timer-btn stop" onclick="stopTimer()" style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    </svg>
+                </button>
+                <button id="resetBtn" class="timer-btn" onclick="resetTimer()" style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="1,4 1,10 7,10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="timerStatus" class="timer-status">Ready to start</div>
+        </div>
+    </div>
+
+    <!-- Celebration Overlay -->
+    <div id="celebrationOverlay" class="celebration-overlay"></div>
+<script src="script.js"></script>
+</body>
+</html>

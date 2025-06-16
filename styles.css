@@ -1,0 +1,1452 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Dark theme (default) */
+            --bg-primary: linear-gradient(135deg, #1e293b 0%, #202d42 50%, #284574 100%);
+            --bg-secondary: linear-gradient(135deg, #233c77 0%, #1f3250 50%, #1e293b 100%);
+            --bg-tertiary: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            --bg-card: rgba(255, 255, 255, 0.1);
+            --bg-card-hover: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.2);
+            --accent-color: #10b981;
+            --accent-hover: #059669;
+            --timer-bg: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] {
+            /* Light theme */
+            --bg-primary: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --bg-secondary: linear-gradient(135deg, #cbd5e1 0%, #e2e8f0 50%, #f8fafc 100%);
+            --bg-tertiary: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
+            --bg-card: rgba(255, 255, 255, 0.8);
+            --bg-card-hover: rgba(255, 255, 255, 0.95);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --accent-color: #10b981;
+            --accent-hover: #059669;
+            --timer-bg: rgba(0, 0, 0, 0.05);
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Splash Screen Styles */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 1000;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--bg-primary);
+            padding: 1rem;
+        }
+
+        .splash-screen.exit {
+            transform: translateX(-100%);
+        }
+
+        .noise-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: 
+                radial-gradient(circle at 25% 25%, var(--text-primary) 1px, transparent 1px),
+                radial-gradient(circle at 75% 75%, var(--text-primary) 1px, transparent 1px);
+            background-size: 100px 100px;
+            background-position: 0 0, 50px 50px;
+        }
+
+        .splash-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+            flex-direction: row;
+            text-align: left;
+        }
+
+        .splash-content.animate {
+            gap: 1.5rem;
+        }
+
+        .logo-container {
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .logo-container.move-to-side {
+            transform: rotate(360deg) scale(0.9);
+        }
+
+        .logo-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 40px rgba(16, 185, 129, 0.4),
+                0 0 80px rgba(16, 185, 129, 0.2),
+                inset 0 2px 10px rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .check-icon {
+            width: 60px;
+            height: 60px;
+            color: #6ee7b7;
+        }
+
+        .logo-glow {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0.1) 50%, transparent 70%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .logo-glow::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 60%);
+            animation: pulse 2s ease-in-out infinite 0.5s;
+        }
+
+        .title-container {
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-20px);
+            flex: 1;
+        }
+
+        .title-container.fade-in {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .app-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            background: linear-gradient(135deg, var(--text-primary), #fcfdff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: 0.05em;
+            line-height: 1.1;
+        }
+
+        .app-subtitle {
+            font-family: 'Times New Roman', Times, serif;
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            font-weight: 300;
+            margin: 0 0 1.5rem 0;
+            letter-spacing: 0.02em;
+        }
+
+        .click-hint {
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .click-hint span {
+            font-family: 'Times New Roman', Times, serif;
+            color: var(--text-secondary);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            display: inline-block;
+        }
+
+        /* Main App - Horizontal Layout */
+        .main-app {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-primary);
+            overflow: hidden;
+        }
+
+        .horizontal-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Left Section - Motivational */
+        .left-section {
+            flex: 1;
+            background: var(--bg-secondary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 1rem;
+        }
+
+        .motivational-text {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        .motivation-word {
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #064d41, #3effbf, #28d4cc, #31ffdd);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0.3rem 0;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideInUp 1s ease-out forwards;
+        }
+
+        .motivation-word:nth-child(1) { animation-delay: 0.5s; }
+        .motivation-word:nth-child(2) { animation-delay: 1s; }
+        .motivation-word:nth-child(3) { animation-delay: 1.5s; }
+        .motivation-word:nth-child(4) { animation-delay: 2s; }
+
+        /* Right Section - Task Menu */
+        .right-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            gap: 1.5rem;
+        }
+
+        .menu-button {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem 2.5rem;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 250px;
+            justify-content: center;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .menu-button:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Task Pages */
+        .task-page {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-tertiary);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .page-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .page-header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-button {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .back-button:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .page-title {
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-weight: 300;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            width: 100%;
+        }
+
+        .search-bar {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1rem 1rem 1rem 3rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Times New Roman', Times, serif;
+            outline: none;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        /* Achievements Page */
+        .achievements-page {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .achievement-item {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .achievement-item.unlocked {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .achievement-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .achievement-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-icon.unlocked {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+            animation: achievementGlow 2s ease-in-out infinite;
+        }
+
+        .achievement-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .achievement-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .achievement-progress {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            opacity:0;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: var(--bg-card-hover);
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            transition: all 0.3s ease;
+        }
+
+        /* Add Task Form */
+        .add-task-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .add-task-form {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-family: 'Times New Roman', Times, serif;
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Times New Roman', Times, serif;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .priority-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        .priority-btn {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .priority-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .duration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .duration-btn {
+            padding: 0.75rem 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .duration-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Floating Timer Button */
+        .floating-timer-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-timer-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.6);
+        }
+
+        .floating-timer-btn svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Timer Popup */
+        .timer-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease-out;
+            padding: 1rem;
+        }
+
+        .timer-popup.show {
+            display: flex;
+        }
+
+        .timer-content {
+            background: var(--bg-secondary);
+            border-radius: 2rem;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px var(--shadow);
+        }
+
+        .timer-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: color 0.2s;
+        }
+
+        .timer-close:hover {
+            color: var(--text-primary);
+        }
+
+        .timer-title {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-family: 'Times New Roman', Times, serif;
+            margin-bottom: 2rem;
+        }
+
+        .timer-display {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+        }
+
+        .timer-circle {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .timer-circle circle {
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .timer-bg {
+            stroke: var(--timer-bg);
+        }
+
+        .timer-progress {
+            stroke: #3b82f6;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+
+        .timer-progress.completed {
+            stroke: var(--accent-color);
+        }
+
+        .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .timer-time {
+            font-size: 1.8rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-duration {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .timer-presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .preset-btn {
+            padding: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .preset-btn:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .preset-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .timer-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-btn:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .timer-btn.start {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .timer-btn.pause {
+            background: #f59e0b;
+            border-color: #f59e0b;
+            color: white;
+        }
+
+        .timer-btn.stop {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: white;
+        }
+
+        .timer-status {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Tasks Container */
+        .tasks-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .task-item {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .task-item:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .task-title {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 500;
+            font-family: 'Times New Roman', Times, serif;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .task-badges {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .task-priority {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .priority-high { background: #ef4444; color: white; }
+        .priority-medium { background: #f59e0b; color: white; }
+        .priority-low { background: var(--accent-color); color: white; }
+
+        .task-duration {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            white-space: nowrap;
+        }
+
+        .task-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Task Timer Section */
+        .task-timer-section {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 0.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .task-timer-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .start-timer-btn {
+            background: var(--accent-color);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            color: white;
+            font-family: 'Times New Roman', Times, serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .start-timer-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .task-timer-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            color: var(--text-primary);
+            font-family: 'Times New Roman', Times, serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .task-timer-btn:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .task-timer-btn.pause {
+            background: #f59e0b;
+            border-color: #f59e0b;
+            color: white;
+        }
+
+        .task-timer-btn.stop {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: white;
+        }
+
+        .task-timer-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Courier New', monospace;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .task-progress-bar {
+            flex: 1;
+            height: 12px;
+            background: var(--timer-bg);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
+            min-width: 100px;
+        }
+
+        .task-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .task-progress-fill.completed {
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
+        }
+
+        .task-progress-fill.active {
+            animation: progressPulse 2s ease-in-out infinite;
+        }
+
+        .task-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            font-family: 'Times New Roman', Times, serif;
+            color: var(--text-muted);
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            color: var(--text-secondary);
+            font-family: 'Times New Roman', Times, serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .action-btn:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .action-btn.complete {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .action-btn.complete:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .action-btn.delete {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .action-btn.delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            opacity: 0.5;
+        }
+
+        /* Celebration Animation */
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .celebration-emoji {
+            position: absolute;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .celebration-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(16, 185, 129, 0.95);
+            color: white;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 2rem 3rem;
+            border-radius: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            z-index: 10000;
+            animation: celebrateMessage 3s ease-out forwards;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px var(--shadow);
+            max-width: calc(100vw - 2rem);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .horizontal-container {
+                flex-direction: column;
+            }
+
+            .left-section, .right-section {
+                flex: none;
+                height: 50vh;
+            }
+
+            .timer-display {
+                width: 150px;
+                height: 150px;
+            }
+
+            .motivation-word {
+                font-size: clamp(1.8rem, 5vw, 2.5rem);
+                margin: 0.2rem 0;
+            }
+
+            .menu-button {
+                min-width: 200px;
+                padding: 1.2rem 2rem;
+                font-size: 1rem;
+                max-width: 280px;
+            }
+
+            .timer-content {
+                padding: 2rem;
+                max-width: 450px;
+            }
+
+            .achievements-grid {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 1rem;
+            }
+
+            .achievement-item {
+                padding: 1.5rem;
+            }
+
+            .achievement-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .task-page {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .page-header-right {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .celebration-message {
+                padding: 1.5rem 2rem;
+                font-size: 1.2rem;
+                margin: 1rem;
+                max-width: calc(100vw - 2rem);
+            }
+
+            .floating-timer-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .floating-timer-btn svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .task-timer-display {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+
+            .task-progress-bar {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                bottom: 15px;
+                left: 15px;
+            }
+
+            .theme-toggle svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .timer-presets {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .duration-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .priority-buttons {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .task-badges {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .task-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .achievement-item {
+                padding: 1.5rem 1rem;
+            }
+
+            .logo-circle {
+                width: 80px;
+                height: 80px;
+            }
+
+            .check-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .app-title {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .splash-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .splash-content.animate {
+                gap: 1rem;
+            }
+
+            .right-section {
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .menu-button {
+                min-width: 180px;
+                padding: 1rem 1.5rem;
+                font-size: 0.9rem;
+                max-width: 250px;
+            }
+
+            .add-task-form {
+                padding: 1.5rem;
+            }
+
+            .timer-content {
+                padding: 1.5rem;
+                max-width: 350px;
+            }
+
+            .timer-display {
+                width: 120px;
+                height: 120px;
+            }
+
+            .timer-time {
+                font-size: 1.4rem;
+            }
+
+            .task-item {
+                padding: 1rem;
+            }
+
+            .task-timer-controls {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .start-timer-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .duration-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 0.3; 
+            }
+            50% { 
+                transform: scale(1.1); 
+                opacity: 0.6; 
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes progressPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes achievementGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+            }
+        }
+
+        @keyframes celebrate-left {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(50vw, -50vh) rotate(180deg) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(100vw, -100vh) rotate(360deg) scale(0.5);
+            }
+        }
+
+        @keyframes celebrate-right {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50vw, -50vh) rotate(-180deg) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-100vw, -100vh) rotate(-360deg) scale(0.5);
+            }
+        }
+
+        @keyframes celebrateMessage {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+    
